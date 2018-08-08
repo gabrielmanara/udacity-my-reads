@@ -1,9 +1,9 @@
-import React from 'react'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
-import { Route } from 'react-router-dom'
-import Header from './components/Header'
-import BookView from './views/BooksView'
+import React from "react";
+import * as BooksAPI from "./BooksAPI";
+import "./App.css";
+import { Route } from "react-router-dom";
+import Header from "./components/Header";
+import BookView from "./views/BooksView";
 
 class BooksApp extends React.Component {
   state = {
@@ -15,25 +15,44 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false
-  }
+  };
 
   componentDidMount() {
     this.fetchAllBooks();
   }
 
   fetchAllBooks = () => {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books })
-    })
-  }
+    BooksAPI.getAll().then(books => {
+      this.setState({ books });
+    });
+  };
+
+  updateBook = (bookThatWillUpdate, event) => {
+    const newShelf = event.target.value;
+    BooksAPI.update(bookThatWillUpdate, newShelf).then(bookList => {
+      this.state.books.map((book, index) => {
+        if (book.id === bookThatWillUpdate.id) {
+          const books = [...this.state.books];
+          books[index].shelf = newShelf;
+          this.setState({
+            books,
+          });
+        }
+      });
+    });
+  };
 
   render() {
     return (
       <div>
         <Header title={`MyReads`} />
-        <Route path="/" exact render={() => (
-          <BookView books={this.state.books} />
-        )} />
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <BookView updateBook={this.updateBook} books={this.state.books} />
+          )}
+        />
       </div>
       // <div className="app">
       //   {this.state.showSearchPage ? (
@@ -61,8 +80,8 @@ class BooksApp extends React.Component {
       //     <BookView />
       //   )}
       // </div>
-    )
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;

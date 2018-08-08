@@ -4,12 +4,17 @@ import BookList from '../components/BookList'
 
 class BooksView extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    updateBook: PropTypes.func
   };
 
-  getBooksByShelf = (shelf) => {
+  getBooksByShelf = shelf => {
     return this.props.books.filter(books => books.shelf === shelf);
-  }
+  };
+
+  changeShelf = (book, event) => {
+    this.props.updateBook(book, event);
+  };
 
   render() {
     return (
@@ -17,24 +22,31 @@ class BooksView extends Component {
         <div className="list-books-content">
           <div>
             <BookList
-              listOfBooks={this.getBooksByShelf('currentlyReading')}
-              title={`Currently Reading`} />
+              onShelfChange={this.changeShelf}
+              listOfBooks={this.getBooksByShelf("currentlyReading")}
+              title={`Currently Reading`}
+            />
 
             <BookList
-              listOfBooks={this.getBooksByShelf('wantToRead')}
-              title={`Want to Read`} />
+              onShelfChange={this.changeShelf}
+              listOfBooks={this.getBooksByShelf("wantToRead")}
+              title={`Want to Read`}
+            />
 
             <BookList
-              listOfBooks={this.getBooksByShelf('read')}
-              title={`Read`} />
-
+              onShelfChange={this.changeShelf}
+              listOfBooks={this.getBooksByShelf("read")}
+              title={`Read`}
+            />
           </div>
         </div>
         <div className="open-search">
-          <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+          <a onClick={() => this.setState({ showSearchPage: true })}>
+            Add a book
+          </a>
         </div>
       </div>
-    )
+    );
   }
 }
 
