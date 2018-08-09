@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import BookList from '../components/BookList'
+import Header from "../components/Header";
 
 class BooksView extends Component {
   static propTypes = {
@@ -18,32 +19,35 @@ class BooksView extends Component {
 
   render() {
     return (
-      <div className="list-books">
-        <div className="list-books-content">
-          <div>
-            <BookList
-              onShelfChange={this.changeShelf}
-              listOfBooks={this.getBooksByShelf("currentlyReading")}
-              title={`Currently Reading`}
-            />
+      <div className="app">
+        <Header title={`MyReads`} />
+        <div className="list-books">
+          <div className="list-books-content">
+            <div>
+              <BookList
+                onShelfChange={this.changeShelf}
+                listOfBooks={this.getBooksByShelf("currentlyReading")}
+                title={`Currently Reading`}
+              />
 
-            <BookList
-              onShelfChange={this.changeShelf}
-              listOfBooks={this.getBooksByShelf("wantToRead")}
-              title={`Want to Read`}
-            />
+              <BookList
+                onShelfChange={this.changeShelf}
+                listOfBooks={this.getBooksByShelf("wantToRead")}
+                title={`Want to Read`}
+              />
 
-            <BookList
-              onShelfChange={this.changeShelf}
-              listOfBooks={this.getBooksByShelf("read")}
-              title={`Read`}
-            />
+              <BookList
+                onShelfChange={this.changeShelf}
+                listOfBooks={this.getBooksByShelf("read")}
+                title={`Read`}
+              />
+            </div>
           </div>
-        </div>
-        <div className="open-search">
-          <a onClick={() => this.setState({ showSearchPage: true })}>
-            Add a book
-          </a>
+          <div className="open-search">
+            <a onClick={() => this.setState({ showSearchPage: true })}>
+              Add a book
+            </a>
+          </div>
         </div>
       </div>
     );
