@@ -8,13 +8,6 @@ import SearchView from "./views/SearchView";
 class BooksApp extends React.Component {
   state = {
     books: [],
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
   };
 
   componentDidMount() {
@@ -30,6 +23,35 @@ class BooksApp extends React.Component {
   updateBook = (bookThatWillUpdate, event) => {
     const newShelf = event.target.value;
     BooksAPI.update(bookThatWillUpdate, newShelf).then(bookList => {
+      
+      let booksCounter = 0;
+
+      for (const key in bookList) {
+        if (bookList.hasOwnProperty(key)) {
+          booksCounter += bookList[key].length;
+        }
+      }
+      
+      // Has a new item on shelfs
+      if (booksCounter > this.state.books.length) {
+        const books = [...this.state.books];
+        bookThatWillUpdate.shelf = newShelf;
+        books.push(bookThatWillUpdate);
+        return this.setState({ books });
+      }
+
+      // Remove books from shelfs
+      if (booksCounter < this.state.books.length) {
+        this.state.books.map((book, index) => {
+          if (book.id === bookThatWillUpdate.id) {
+            let books = [...this.state.books];
+            books = books.slice(0, index);
+            return this.setState({ books });
+          }
+        });
+      }
+
+      // Change books between shelfs
       this.state.books.map((book, index) => {
         if (book.id === bookThatWillUpdate.id) {
           const books = [...this.state.books];
@@ -39,28 +61,15 @@ class BooksApp extends React.Component {
           });
         }
       });
+
     });
   };
 
   render() {
-    return (
-      <div>
-        <Route
-          path="/"
-          exact
-          render={() => (
-            <BookView updateBook={this.updateBook} books={this.state.books} />
-          )}
-        />
-        <Route
-          path="/search"
-          exact
-          render={() => (
-            <SearchView />
-          )}
-        />
-      </div>
-    );
+    return <div>
+        <Route path="/" exact render={() => <BookView updateBook={this.updateBook} books={this.state.books} />} />
+        <Route path="/search" exact render={() => <SearchView updateBook={this.updateBook} />} />
+      </div>;
   }
 }
 

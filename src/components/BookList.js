@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 class BookList extends Component {
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     listOfBooks: PropTypes.array,
     onShelfChange: PropTypes.func
   };
@@ -13,7 +13,10 @@ class BookList extends Component {
     const { title, listOfBooks, onShelfChange } = this.props;
     
     return <div className="bookshelf">
-        <h2 className="bookshelf-title">{title}</h2>
+        {title &&
+          <h2 className="bookshelf-title">{title}</h2>
+        }
+        
         <div className="bookshelf-books">
           <ol className="books-grid">
             {listOfBooks.map(book => <li key={book.id}>
