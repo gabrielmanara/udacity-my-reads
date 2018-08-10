@@ -22,8 +22,12 @@ class BookList extends Component {
             {listOfBooks.map(book => <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }} />
-                    <div className="book-shelf-changer">
+                    {book.imageLinks &&
+                      <div 
+                        className="book-cover" 
+                        style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }} />
+                    }
+                  <div className="book-shelf-changer">
                     <select 
                       value={book.shelf} 
                       onChange={(event) => onShelfChange(book, event)}>
