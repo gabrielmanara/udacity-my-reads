@@ -11,7 +11,8 @@ class SearchView extends Component {
   };
 
   static propTypes = {
-    updateBook: PropTypes.func
+    updateBook: PropTypes.func,
+    books: PropTypes.array.isRequired
   };
 
   clearState() {
@@ -31,15 +32,27 @@ class SearchView extends Component {
           typeof books !== "undefined" &&
           !books.error
         ) {
-          this.setState({ books: books });
+          this.setShelfOnResults(books);
         } else {
           this.setState({ books: [] });
         }
-        
       });
     } else {
       this.clearState();
     }
+  }
+
+  setShelfOnResults(books) {
+
+    books.map(book => {
+      this.props.books.map(bookWithShelf => {
+        if (book.id === bookWithShelf.id) {
+          book.shelf = bookWithShelf.shelf;
+        }
+      })
+    })
+
+    this.setState({ books });
   }
 
   changeShelf = (book, event) => {
