@@ -22,11 +22,10 @@ class BookList extends Component {
             {listOfBooks.map(book => <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    {book.imageLinks &&
-                      <div 
-                        className="book-cover" 
-                        style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }} />
-                    }
+                    <div 
+                      className="book-cover" 
+                      style={{ width: 128, height: 193, backgroundImage: `${book.imageLinks && `url(${book.imageLinks.smallThumbnail})`}` }} />
+                  
                   <div className="book-shelf-changer">
                     <select 
                       value={book.shelf ? book.shelf : "none"} 
