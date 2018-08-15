@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import BookList from "../components/BookList";
 import * as BooksAPI from "../BooksAPI";
 import PropTypes from "prop-types";
+import { DebounceInput } from "react-debounce-input";
 
 class SearchView extends Component {
   state = {
@@ -23,7 +24,7 @@ class SearchView extends Component {
     this.setState({
       query: value
     });
-
+    
     if (value !== "") {
       BooksAPI.search(value, 20).then(books => {
         if (
@@ -60,31 +61,25 @@ class SearchView extends Component {
   };
 
   render() {
-    return (
-      <div className="app">
+    return <div className="app">
         <div className="search-books">
           <div className="search-books-bar">
             <Link to="/" className="close-search">
               Close
             </Link>
             <div className="search-books-input-wrapper">
-              <input
-                type="text"
+              <DebounceInput 
                 value={this.state.query}
-                onChange={event => this.updateQuery(event.target.value)}
+                debounceTimeout={300} 
                 placeholder="Search by title or author"
-              />
+                onChange={event => this.updateQuery(event.target.value)}/>
             </div>
           </div>
           <div className="search-books-results">
-            <BookList
-              onShelfChange={this.changeShelf}
-              listOfBooks={this.state.books}
-            />
+            <BookList onShelfChange={this.changeShelf} listOfBooks={this.state.books} />
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 
