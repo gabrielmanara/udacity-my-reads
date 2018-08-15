@@ -20,7 +20,7 @@ class SearchView extends Component {
 
   updateQuery(value) {
     this.setState({
-      query: value.trim()
+      query: value
     });
 
     if (value !== "") {
