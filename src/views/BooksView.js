@@ -10,6 +10,23 @@ class BooksView extends Component {
     updateBook: PropTypes.func
   };
 
+  state = {
+    shelfs: [
+      {
+        id: "currentlyReading",
+        title: "Currently Reading"
+      },
+      {
+        id: "wantToRead",
+        title: "Want to Read"
+      },
+      {
+        id: "read",
+        title: "Read"
+      }
+    ]
+  };
+
   getBooksByShelf = shelf => {
     return this.props.books.filter(books => books.shelf === shelf);
   };
@@ -22,31 +39,22 @@ class BooksView extends Component {
     return (
       <div className="app">
         <Header title={`MyReads`} />
+        
         <div className="list-books">
           <div className="list-books-content">
             <div>
-              <BookList
-                onShelfChange={this.changeShelf}
-                listOfBooks={this.getBooksByShelf("currentlyReading")}
-                title={`Currently Reading`}
-              />
-
-              <BookList
-                onShelfChange={this.changeShelf}
-                listOfBooks={this.getBooksByShelf("wantToRead")}
-                title={`Want to Read`}
-              />
-
-              <BookList
-                onShelfChange={this.changeShelf}
-                listOfBooks={this.getBooksByShelf("read")}
-                title={`Read`}
-              />
+              {this.state.shelfs.map(shelf => (
+                <BookList
+                  onShelfChange={this.changeShelf}
+                  key={shelf.id}
+                  listOfBooks={this.getBooksByShelf(shelf.id)}
+                  title={shelf.title}
+                />
+              ))}
             </div>
           </div>
           <div className="open-search">
-            <Link to="/search">Add a book
-            </Link>
+            <Link to="/search">Add a book</Link>
           </div>
         </div>
       </div>
