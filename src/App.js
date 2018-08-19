@@ -44,11 +44,10 @@ class BooksApp extends React.Component {
       if (book.id === bookThatWillUpdate.id) {
         const books = [...this.state.books];
         books[index].shelf = newShelf;
-        this.setState({
+        return this.setState({
           books
         });
       }
-      return this.state.books;
     });
   }
 

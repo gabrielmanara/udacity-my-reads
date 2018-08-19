@@ -16,6 +16,19 @@ class SearchView extends Component {
     books: PropTypes.array.isRequired
   };
 
+  componentWillReceiveProps(nextProps) {
+    let books = [...this.state.books];
+    books.map((book) => {
+      nextProps.books.map((bookOnHome) => {
+        if (book.id === bookOnHome.id) {
+          book.shelf = bookOnHome.shelf;
+        }
+      });
+    });
+
+    return this.setState({ books });
+  }
+
   clearState() {
     this.setState({ query: "", books: [] });
   }
@@ -24,7 +37,7 @@ class SearchView extends Component {
     this.setState({
       query: value
     });
-    
+
     if (value !== "") {
       BooksAPI.search(value, 20).then(books => {
         if (
@@ -44,14 +57,13 @@ class SearchView extends Component {
   }
 
   setShelfOnResults(books) {
-
     books.map(book => {
       this.props.books.map(bookWithShelf => {
         if (book.id === bookWithShelf.id) {
           book.shelf = bookWithShelf.shelf;
         }
-      })
-    })
+      });
+    });
 
     this.setState({ books });
   }
@@ -61,25 +73,31 @@ class SearchView extends Component {
   };
 
   render() {
-    return <div className="app">
+    return (
+      <div className="app">
         <div className="search-books">
           <div className="search-books-bar">
             <Link to="/" className="close-search">
               Close
             </Link>
             <div className="search-books-input-wrapper">
-              <DebounceInput 
+              <DebounceInput
                 value={this.state.query}
-                debounceTimeout={300} 
+                debounceTimeout={300}
                 placeholder="Search by title or author"
-                onChange={event => this.updateQuery(event.target.value)}/>
+                onChange={event => this.updateQuery(event.target.value)}
+              />
             </div>
           </div>
           <div className="search-books-results">
-            <BookList onShelfChange={this.changeShelf} listOfBooks={this.state.books} />
+            <BookList
+              onShelfChange={this.changeShelf}
+              listOfBooks={this.state.books}
+            />
           </div>
         </div>
-      </div>;
+      </div>
+    );
   }
 }
 
